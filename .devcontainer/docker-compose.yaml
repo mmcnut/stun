@@ -1,0 +1,16 @@
+version: '3'
+services:
+  xdv-stun:
+    container_name: xdv-stun
+    build:
+      context: ..
+      dockerfile: ./.devcontainer/Dockerfile
+      secrets:
+        - personal_token # Add personal gitlab token to docker build.
+    volumes:
+      - type: bind # Mount the source code to the container
+        source: ..
+        target: /workspace/xdv-stun/
+    command: sleep infinity # Ensure the container remains open
+
+

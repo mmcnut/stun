@@ -1,0 +1,10 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Valgrind Launch",
+        "type": "shell",
+        "command": "nohup bash -c \"valgrind -q -s --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --vgdb-error=0 --log-file=/workspace/xdv-stun/valgrind-out.txt /workspace/xdv-stun/build/bin/hello_world &\""
+      }
+    ]
+  }

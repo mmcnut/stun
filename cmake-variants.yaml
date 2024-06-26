@@ -1,0 +1,13 @@
+buildTypes:
+  default: Release
+  description: Build Type
+  choices:
+    debug:
+      short: Debug
+      long: Build the debug version of all applications
+      buildType: Debug
+    release:
+      short: Release
+      long: Build the release version of all applications
+      buildType: Release
+

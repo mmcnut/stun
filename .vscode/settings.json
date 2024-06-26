@@ -1,0 +1,13 @@
+{
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
+
+    "[cpp]": {
+        "editor.wordBasedSuggestions": "off",
+        "editor.suggest.insertMode": "insert",
+        "editor.semanticHighlighting.enabled": true,
+        "editor.defaultFormatter": "xaver.clang-format",
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "modificationsIfAvailable",
+        "editor.tabSize": 2
+    }
+}

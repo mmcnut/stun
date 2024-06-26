@@ -1,0 +1,17 @@
+{
+    "name": "xdv-stun",
+    "dockerComposeFile": "docker-compose.yaml",
+    "service": "xdv-stun",
+    "workspaceFolder": "/workspace/xdv-stun/",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "ms-vscode.cmake-tools",
+                "eamodio.gitlens",
+                "xaver.clang-format",
+                "streetsidesoftware.code-spell-checker"
+            ]
+        }
+    }
+}
