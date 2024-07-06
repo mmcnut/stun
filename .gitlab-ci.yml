@@ -38,7 +38,7 @@ test:
     - apt update && apt -y install cmake
   script:
     - cd build
-    - ctest --test-dir hello_world
+    - ctest --test-dir stun
 
 # deploy:
 #   stage: deploy

@@ -5,8 +5,6 @@ services:
     build:
       context: ..
       dockerfile: ./.devcontainer/Dockerfile
-      secrets:
-        - personal_token # Add personal gitlab token to docker build.
     volumes:
       - type: bind # Mount the source code to the container
         source: ..

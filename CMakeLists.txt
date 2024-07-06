@@ -30,4 +30,4 @@ message("ENABLE_TESTING: ${ENABLE_TESTING} - Testing is disabled!")
 endif()
 
 # Add project folder
-add_subdirectory(hello_world)
+add_subdirectory(stun)
