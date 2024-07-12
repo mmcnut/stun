@@ -31,6 +31,89 @@ enum class StunMessageClass {
  */
 enum class StunMethod { BINDING = 1 };
 
+enum class AttributeTypes {
+  // Comprehension-required range (0x0000-0x7FFF)
+  MAPPED_ADDRESS = 0x0001,
+  USERNAME = 0x0006,
+  MESSAGE_INTEGRITY = 0x0008,
+  ERROR_CODE,
+  UNKNOWN_ATTRIBUTES,
+  REALM = 0x0014,
+  NONCE,
+  XOR_MAPPED_ADDRESS = 0x0020,
+
+  // Comprehension-optional range (0x8000-0xFFFF)
+  SOFTWARE = 0x8022,
+  ALTERNATE_SERVER,
+  FINGERPRINT = 0x8028
+};
+
+enum class AddressFamilies { IPv4 = 1, IPv6 = 2 };
+
+class StunAttribute {
+ public:
+  StunAttribute(AttributeTypes type, uint16_t length)
+      : type_(type), length_(length){};
+
+  virtual void ToBytes(std::vector<std::byte>::iterator& begin,
+                       const std::vector<std::byte>::iterator end) = 0;
+
+  virtual void FromBytes() = 0;
+
+  void SetLength(uint16_t length) { length_ = length; }
+
+ protected:
+  void StunAttributeHeaderToBytes(std::vector<std::byte>::iterator& begin,
+                                  const std::vector<std::byte>::iterator end) {
+    *begin++ = std::byte{(static_cast<int>(type_) >> 8) & BYTE_MASK};
+    *begin++ = std::byte{static_cast<int>(type_) & BYTE_MASK};
+    *begin++ = std::byte{length_ >> 8 & BYTE_MASK};
+    *begin++ = std::byte{length_ & BYTE_MASK};
+  }
+
+ private:
+  AttributeTypes type_;
+  uint16_t length_;
+};
+
+class MappedAddress : public StunAttribute {
+ public:
+  MappedAddress(u_int16_t port, std::string address, AddressFamilies family,
+                AttributeTypes type)
+      : port_(port),
+        family_(family),
+        StunAttribute(AttributeTypes::MAPPED_ADDRESS, 4) {
+    int octet_1, octet_2, octet_3, octet_4;
+    sscanf(address, '%d.%d.%d.%d', &octet_1, &octet_2, &octet_3, &octet_4);
+    address_ += (octet_1 << 24) + (octet_2 << 16) + (octet_3 << 8) + octet_4;
+  };
+
+  void ToBytes(std::vector<std::byte>::iterator& begin,
+               const std::vector<std::byte>::iterator end) override {
+    StunAttributeHeaderToBytes(begin, begin + 4);
+    *begin++ = std::byte{0};
+    *begin++ = std::byte{static_cast<int>(family_)};
+    *begin++ = std::byte{(port_ >> 8) & BYTE_MASK};
+    *begin++ = std::byte{port_ & BYTE_MASK};
+  }
+
+  void FromBytes() override {}
+
+ private:
+  uint16_t port_;
+  uint32_t address_;
+  AddressFamilies family_;
+};
+
+class TypeLengthValueHeader {
+ public:
+  TypeLengthValueHeader() = default;
+
+ private:
+  AttributeTypes type_;
+  uint16_t length_;
+};
+
 /**
  * @brief Class to manage the slight complexity of the STUN message type field
  * along with leading zeros
